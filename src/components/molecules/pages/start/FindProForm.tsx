@@ -43,6 +43,7 @@ export default function FindProForm({ token, outOfTokens }: Props) {
 
   const files = watch("files");
   const coords = watch("coords");
+  const formDisabled = outOfTokens || isLoading;
   const canSubmit = files?.length > 0 && coords !== null;
 
   const onSubmit = async (data: FormValues) => {
@@ -93,40 +94,52 @@ export default function FindProForm({ token, outOfTokens }: Props) {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Files */}
-        <Controller
-          control={control}
-          name="files"
-          render={({ field: { value, onChange } }) => (
-            <FileUploader files={value} onFilesChange={onChange} />
-          )}
-        />
-        <div className="mt-6" />
-        {/* Location */}
-        <Controller
-          control={control}
-          name="postcode"
-          render={({ field: { value, onChange } }) => (
-            <Controller
-              control={control}
-              name="coords"
-              render={({
-                field: { value: coordsVal, onChange: setCoords },
-              }) => (
-                <LocationPicker
-                  postcode={value}
-                  onPostcodeChange={onChange}
-                  coords={coordsVal}
-                  onCoordsChange={setCoords}
-                />
-              )}
-            />
-          )}
-        />
-        <GetLeadsCTA
-          disabled={outOfTokens || isLoading || !canSubmit}
-          label={outOfTokens ? "Buy Tokens to Continue" : "Get 3 Leads"}
-        />
+        <fieldset
+          disabled={formDisabled}
+          aria-disabled={formDisabled}
+          className="disabled:cursor-not-allowed"
+        >
+          {/* Files */}
+          <Controller
+            control={control}
+            name="files"
+            render={({ field: { value, onChange } }) => (
+              <FileUploader
+                files={value}
+                onFilesChange={onChange}
+                disabled={formDisabled}
+                outOfTokens={outOfTokens}
+              />
+            )}
+          />
+          <div className="mt-6" />
+          {/* Location */}
+          <Controller
+            control={control}
+            name="postcode"
+            render={({ field: { value, onChange } }) => (
+              <Controller
+                control={control}
+                name="coords"
+                render={({
+                  field: { value: coordsVal, onChange: setCoords },
+                }) => (
+                  <LocationPicker
+                    postcode={value}
+                    onPostcodeChange={onChange}
+                    coords={coordsVal}
+                    onCoordsChange={setCoords}
+                    disabled={formDisabled}
+                  />
+                )}
+              />
+            )}
+          />
+          <GetLeadsCTA
+            disabled={outOfTokens || isLoading || !canSubmit}
+            label={outOfTokens ? "Buy Tokens to Continue" : "Get 3 Leads"}
+          />
+        </fieldset>
       </form>
       <SearchingOverlay
         open={isLoading}

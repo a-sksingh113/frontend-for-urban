@@ -86,6 +86,7 @@ type LocationPickerProps = {
   onPostcodeChange: (postcode: string) => void;
   coords: { lat: number; lng: number } | null;
   onCoordsChange: (coords: { lat: number; lng: number } | null) => void;
+  disabled: boolean;
 };
 
 export default function LocationPicker({
@@ -93,6 +94,7 @@ export default function LocationPicker({
   onPostcodeChange,
   coords,
   onCoordsChange,
+  disabled = false,
 }: LocationPickerProps) {
   const [loadingDetect, setLoadingDetect] = useState(false);
 
@@ -143,7 +145,7 @@ export default function LocationPicker({
   }, []);
 
   const selectSuggestion = (s: PlaceSuggestion) => {
-    onPostcodeChange(s.description); // what the backend calls "description"
+    onPostcodeChange(s.description);
     onCoordsChange({ lat: s.lat, lng: s.lng });
     setOpen(false);
   };
@@ -255,8 +257,8 @@ export default function LocationPicker({
             type="button"
             onClick={detect}
             variant="secondary"
-            className="w-full h-11 inline-flex items-center justify-center gap-2 bg-gray-100 text-black"
-            disabled={loadingDetect}
+            className="w-full h-11 inline-flex items-center justify-center gap-2 bg-gray-100 text-black disabled:cursor-not-allowed"
+            disabled={loadingDetect || disabled}
           >
             <LocateFixed className="h-4 w-4" />
             {loadingDetect ? "Detecting…" : "Auto-detect"}

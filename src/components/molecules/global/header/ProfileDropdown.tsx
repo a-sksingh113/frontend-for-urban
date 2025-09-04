@@ -4,6 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { User as UserIcon, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLogoutMutation } from "@/redux/api/authApi";
+import { apiSlice } from "@/redux/api/api";
+import { useAppDispatch } from "@/redux/hook";
+import { useRouter } from "next/navigation";
+import { handleApiError } from "@/lib/handleApiError";
+import { toast } from "sonner";
 
 type Props = {
   tokenRemaining: number;
@@ -29,7 +35,25 @@ export default function ProfileDropdown({
     return () => document.removeEventListener("mousedown", onDocClick);
   }, []);
 
+  const [logout, { isLoading }] = useLogoutMutation();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
   const handleLinkClick = () => setIsOpen(false);
+
+  const handleLogout = async () => {
+    console.log("first");
+    try {
+      setIsOpen(false);
+      const res = await logout().unwrap();
+      dispatch(apiSlice.util.resetApiState());
+      toast.success(res.message || "Logout successfully");
+      router.push("/login");
+      router.refresh();
+    } catch (err) {
+      handleApiError(err);
+    }
+  };
 
   const tokens = tokenRemaining ?? 0;
 
@@ -81,15 +105,15 @@ export default function ProfileDropdown({
 
         {/* Logout via Server Action */}
         <li role="option" aria-selected="false" onClick={handleLinkClick}>
-          <form action={logoutAction}>
-            <button
-              type="submit"
-              className="flex w-full items-center px-4 py-2 text-red-600 hover:bg-gray-100 hover:text-red-700 transition-colors cursor-pointer"
-            >
-              <LogOut className="mr-2 w-5 h-5" />
-              Logout
-            </button>
-          </form>
+          <button
+            type="submit"
+            className="flex w-full items-center px-4 py-2 text-red-600 hover:bg-gray-100 hover:text-red-700 transition-colors cursor-pointer"
+            onClick={handleLogout}
+            disabled={isLoading}
+          >
+            <LogOut className="mr-2 w-5 h-5" />
+            Logout
+          </button>
         </li>
       </ul>
     </div>

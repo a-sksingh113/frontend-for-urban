@@ -18,6 +18,7 @@ export async function getUserProfile(): Promise<ProfileResponse | null> {
         Accept: "application/json",
         Cookie: cookieHeader,
       },
+      credentials: "include",
       cache: "no-store",
       next: { revalidate: 0 },
     }
@@ -45,6 +46,7 @@ export async function getUserHistory(): Promise<GetHistoryResponse | null> {
         Accept: "application/json",
         Cookie: cookieHeader,
       },
+      credentials: "include",
       cache: "no-store",
       next: { revalidate: 0 },
     }

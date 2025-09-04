@@ -17,9 +17,9 @@ export default function Heading({
     <Component
       className={cn(
         "font-bold text-gray-900",
-        Component === "h1" && "text-4xl",
-        Component === "h2" && "text-3xl",
-        Component === "h3" && "text-2xl",
+        Component === "h1" && "text-3xl sm:text-4xl",
+        Component === "h2" && "text-2xl sm:text-3xl",
+        Component === "h3" && "text-xl sm:text-2xl",
         Component === "h4" && "text-xl",
         Component === "h5" && "text-lg",
         Component === "h6" && "text-base",

@@ -15,7 +15,7 @@ export default function middleware(request: NextRequest) {
     return NextResponse.redirect(dashboardUrl);
   }
   // protected routes if token doesn't exist
-  const protectedRoutes = ["/dashboard", "/reset-password"];
+  const protectedRoutes = ["/dashboard", "/reset-password", "/results"];
 
   if (!token && protectedRoutes.some((route) => pathname.startsWith(route))) {
     const loginUrl = new URL("/login", request.url);
@@ -34,5 +34,6 @@ export const config = {
     "/dashboard",
     "/forgot-password/:path*",
     "/reset-password",
+    "/results",
   ],
 };
