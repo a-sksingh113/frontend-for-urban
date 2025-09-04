@@ -1,0 +1,6 @@
+export { default as CameraIcon } from "./CameraIcon";
+export { default as PinIcon } from "./PinIcon";
+export { default as PhoneIcon } from "./PhoneIcon";
+export { default as StarIcon } from "./StarIcon";
+export { default as CheckIcon } from "./CheckIcon";
+export { default as GoogleIcon } from "./GoogleIcon";
