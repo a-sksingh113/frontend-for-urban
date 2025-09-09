@@ -17,7 +17,7 @@ export default function HeroPrimaryCTA({
   size = "lg",
 }: HeroPrimaryCTAProps) {
   return (
-    <div className={`mx-auto w-full max-w-sm ${className ?? ""}`}>
+    <div className={`mx-auto w-full max-w-fit ${className ?? ""}`}>
       <Button
         asChild
         size={size}

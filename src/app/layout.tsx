@@ -33,7 +33,7 @@ export default function RootLayout({
           <main className="min-h-0 pt-15">{children}</main>
           <Footer />
         </ReduxProvider>
-        <Toaster position="top-center" duration={3000} />
+        <Toaster position="top-center" duration={3000} richColors />
       </body>
     </html>
   );

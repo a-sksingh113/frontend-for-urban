@@ -236,7 +236,7 @@ export default function LocationPicker({
             onFocus={() => setOpen(suggestions.length > 0)}
             onKeyDown={onKeyDown}
             placeholder="Enter postcode or address"
-            className="w-full h-12 border border-slate-200 rounded-lg bg-white px-3 outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full h-12 border border-slate-200 rounded-lg bg-white px-3 text-sm outline-none focus:ring-1 focus:ring-blue-500"
             aria-autocomplete="list"
             aria-expanded={open}
             aria-controls="places-listbox"

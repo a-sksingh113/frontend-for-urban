@@ -33,7 +33,6 @@ export default function FileUploader({
 
   const onFileReject = React.useCallback(
     (file: File, message: string) => {
-      // If locked, show upsell instead of generic reject reason
       if (isLocked) {
         toast.error("Uploads are disabled", {
           description: "You’re out of credits. Please buy tokens or upgrade.",
@@ -68,7 +67,8 @@ export default function FileUploader({
       <div className="relative">
         <FileUpload
           maxFiles={1}
-          maxSize={5 * 1024 * 1024}
+          maxSize={8 * 1024 * 1024}
+          accept="image/png,image/jpeg"
           className={`w-full ${isLocked ? "opacity-60" : ""}`}
           value={files}
           onValueChange={handleValueChange}
@@ -82,7 +82,7 @@ export default function FileUploader({
               </div>
               <p className="font-medium text-sm">Drag & drop files here</p>
               <p className="text-muted-foreground text-xs">
-                Or click to browse (max 1 file, up to 5MB)
+                Or click to browse (max 1 file, up to 1MB)
               </p>
             </div>
 

@@ -24,7 +24,7 @@ export default function Start({
     <div className="min-h-[70vh] bg-gradient-to-b from-slate-50 to-white">
       <MaxWidthWrapper>
         <section className="py-10 md:py-14">
-          <div className="mb-7">
+          <div className="mb-10 text-center">
             <Heading as="h1">Get 3 Ranked Pros in Minutes</Heading>
             <Text className="mt-2 text-gray-600">
               Snap what needs fixing, auto-detect your location, and we’ll match

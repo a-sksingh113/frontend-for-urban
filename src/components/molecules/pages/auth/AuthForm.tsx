@@ -92,7 +92,11 @@ export function AuthForm({ mode }: Props) {
         <EmailField register={register} error={errors.email?.message} />
       </div>
       <div>
-        <PasswordField register={register} error={errors.password?.message} />
+        <PasswordField
+          id="password"
+          register={register}
+          error={errors.password?.message}
+        />
       </div>
       {mode === "login" && (
         <div className="text-right -mt-2 mb-2">

@@ -40,6 +40,7 @@ export default function FindProForm({ token, outOfTokens }: Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
+  const [isNavigating, setIsNavigating] = React.useState(false);
 
   const files = watch("files");
   const coords = watch("coords");
@@ -84,6 +85,7 @@ export default function FindProForm({ token, outOfTokens }: Props) {
       const res = await submitProblem({ data: formData }).unwrap();
       dispatch(setResults(res));
       saveResults(res);
+      setIsNavigating(true);
       router.push("/results");
       router.refresh();
     } catch (error) {
@@ -142,7 +144,7 @@ export default function FindProForm({ token, outOfTokens }: Props) {
         </fieldset>
       </form>
       <SearchingOverlay
-        open={isLoading}
+        open={isLoading || isNavigating}
         locationLabel={watch("postcode") || "your area"}
       />
     </>
