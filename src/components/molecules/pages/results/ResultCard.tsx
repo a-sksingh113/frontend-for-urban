@@ -23,6 +23,8 @@ export function ResultCard({
     <article aria-labelledby={`${id}-name`}>
       <Card
         className={cn(
+          // ✅ equal heights in grid
+          "h-full flex flex-col",
           "overflow-hidden rounded-2xl border border-slate-200 shadow-sm p-0",
           "transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus-within:ring-2 focus-within:ring-blue-100"
         )}
@@ -41,12 +43,14 @@ export function ResultCard({
         </div>
 
         {/* Content */}
-        <div className="p-5">
+        {/* ✅ let content grow and push CTAs to bottom */}
+        <div className="p-5 flex flex-col grow">
           <div className="mb-2 flex items-start justify-between gap-3">
+            {/* ✅ clamp to 2 lines so varying names don’t change card height */}
             <Heading
               as="h4"
               id={`${id}-name`}
-              className="leading-snug tracking-tight"
+              className="leading-snug tracking-tight line-clamp-2"
             >
               {name}
             </Heading>
@@ -79,7 +83,8 @@ export function ResultCard({
           </div>
 
           {/* CTAs */}
-          <div className="flex items-center justify-between gap-3">
+          {/* ✅ pinned to bottom via mt-auto */}
+          <div className="mt-auto flex items-center gap-3">
             <Button asChild className="flex-1">
               <Link
                 href={bookHref ?? "#"}

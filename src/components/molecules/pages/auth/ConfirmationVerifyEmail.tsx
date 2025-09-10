@@ -1,26 +1,27 @@
 "use client";
 import React from "react";
-import Link from "next/link";
 import { toast } from "sonner";
-import { useForgotPasswordMutation } from "@/redux/api/authApi";
+import { useResendVerifyEmailMutation } from "@/redux/api/authApi";
 import { handleApiError } from "@/lib/handleApiError";
 import { Button, Card } from "@/components/atoms";
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
+import { EmailVerifyIcon } from "@/components/atoms/icons";
 
 type Props = {
   email?: string;
 };
 
-const ConfirmationMessageResetPassword = ({ email }: Props) => {
-  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+const ConfirmationVerifyEmail = ({ email }: Props) => {
+  const [resendVerifyEmail, { isLoading }] = useResendVerifyEmailMutation();
   const hasEmail = Boolean(email);
 
   const onResend = async () => {
     if (!email) return;
     try {
-      const res = await forgotPassword({ email }).unwrap();
+      const res = await resendVerifyEmail({ email }).unwrap();
       toast.success(
-        res?.message ?? "If that email exists, we’ve sent a new reset link."
+        res?.message ??
+          "If that email exists, we’ve sent a new verification link."
       );
     } catch (err) {
       handleApiError(err);
@@ -34,44 +35,22 @@ const ConfirmationMessageResetPassword = ({ email }: Props) => {
           <Card className="w-full max-w-md rounded-2xl border-slate-200 p-6 shadow-sm">
             {/* Icon badge */}
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-blue-50">
-              {/* simple mail + check icon (no external lib) */}
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                className="h-8 w-8"
-                role="img"
-              >
-                <path
-                  d="M20 8.5V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8.5l7.07 4.24a2 2 0 0 0 1.86 0L20 8.5Z"
-                  fill="currentColor"
-                  className="opacity-60"
-                />
-                <path
-                  d="M20 6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2l8 4.8L20 6Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M16.5 9.5l-3.2 3.2-1.3-1.3"
-                  stroke="white"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <EmailVerifyIcon className="h-8 w-8 text-[#0080ff]" />
             </div>
 
             {/* Headline */}
             <h2 className="text-2xl font-bold tracking-tight text-slate-900 text-center">
-              Check your email
+              Confirm your email
             </h2>
 
-            {/* Subheader with bold email */}
+            {/* Subheader */}
             <p className="mt-2 text-center text-slate-700">
-              We&apos;ve sent a password reset link to <br />
+              We&apos;ve sent a confirmation email to <br />
               <span className="font-semibold text-slate-900 break-all">
                 {email || "your email"}
               </span>
-              .
+              . Please check your inbox and click the link to complete your
+              registration.
             </p>
 
             {/* Info panel */}
@@ -82,8 +61,11 @@ const ConfirmationMessageResetPassword = ({ email }: Props) => {
                 <span className="font-medium">junk folder</span> just in case.
               </p>
               <p className="mt-3">
-                Didn’t get the email? You can request a new link after a few
-                minutes.
+                Didn’t get the email? You can request a new link by clicking on{" "}
+                <span className="font-semibold text-slate-900 break-all">
+                  Resend Email
+                </span>{" "}
+                below
               </p>
             </div>
 
@@ -99,16 +81,6 @@ const ConfirmationMessageResetPassword = ({ email }: Props) => {
             >
               {isLoading ? "Sending…" : "Resend Email"}
             </Button>
-
-            {/* Back to login */}
-            <div className="mt-4 text-center">
-              <Link
-                href="/login"
-                className="text-sm font-medium text-blue-700 hover:underline"
-              >
-                Back to login
-              </Link>
-            </div>
           </Card>
         </div>
       </MaxWidthWrapper>
@@ -116,4 +88,4 @@ const ConfirmationMessageResetPassword = ({ email }: Props) => {
   );
 };
 
-export default ConfirmationMessageResetPassword;
+export default ConfirmationVerifyEmail;

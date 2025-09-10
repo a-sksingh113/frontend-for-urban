@@ -1,7 +1,26 @@
+import { User } from "@/types/user";
 import { apiSlice } from "./api";
 
 type AuthResponse = { message: string };
 
+export type UpdateProfileRequest = Partial<
+  Pick<User, "fullName" | "phone" | "city" | "state" | "country" | "zipCode">
+>;
+
+export type UpdateProfileResponse = {
+  message: string;
+  user?: User;
+};
+
+export type ChangePasswordRequest = {
+  oldPassword: string;
+  newPassword: string;
+};
+
+export type ChangePasswordResponse = {
+  success?: boolean;
+  message: string;
+};
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     signup: builder.mutation<AuthResponse, { email: string; password: string }>(
@@ -35,7 +54,6 @@ export const authApi = apiSlice.injectEndpoints({
         body: { email },
       }),
     }),
-
     resetPassword: builder.mutation({
       query: ({ resetToken, password }) => ({
         url: `/api/auth/reset-password/${resetToken}`,
@@ -45,7 +63,43 @@ export const authApi = apiSlice.injectEndpoints({
         },
       }),
     }),
+    verifyEmail: builder.mutation<{ message: string }, { token: string }>({
+      query: ({ token }) => ({
+        url: `/api/auth/verify-email/${encodeURIComponent(token)}`,
+        method: "GET",
+      }),
+    }),
+    resendVerifyEmail: builder.mutation<AuthResponse, { email: string }>({
+      query: ({ email }) => ({
+        url: "/api/auth/resend-verification",
+        method: "POST",
+        body: { email },
+      }),
+    }),
+
+    updateProfile: builder.mutation<
+      UpdateProfileResponse,
+      UpdateProfileRequest
+    >({
+      query: (data) => ({
+        url: "/api/user/profile",
+        method: "PATCH",
+        body: data,
+      }),
+    }),
+
+    changePassword: builder.mutation<
+      ChangePasswordResponse,
+      ChangePasswordRequest
+    >({
+      query: (body) => ({
+        url: "/api/user/change-password",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
+
   overrideExisting: false,
 });
 
@@ -55,4 +109,8 @@ export const {
   useLogoutMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useVerifyEmailMutation,
+  useResendVerifyEmailMutation,
+  useUpdateProfileMutation,
+  useChangePasswordMutation,
 } = authApi;

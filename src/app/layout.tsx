@@ -30,7 +30,7 @@ export default function RootLayout({
       >
         <ReduxProvider>
           <Header />
-          <main className="min-h-0 pt-15">{children}</main>
+          <main className="min-h-0 pt-14">{children}</main>
           <Footer />
         </ReduxProvider>
         <Toaster position="top-center" duration={3000} richColors />

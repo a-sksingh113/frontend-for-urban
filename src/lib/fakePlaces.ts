@@ -5,10 +5,11 @@ export type PlaceSuggestion = {
   lng: number;
   postcode?: string;
   city?: string;
-  country?: string;
+  country?: string; // "UK" | "US"
 };
 
 const PLACES: PlaceSuggestion[] = [
+  // ---- UK ----
   {
     id: "1",
     description: "221B Baker Street, London NW1 6XE, UK",
@@ -81,6 +82,44 @@ const PLACES: PlaceSuggestion[] = [
     lat: 55.94962,
     lng: -3.19001,
   },
+
+  // ---- US ----
+  {
+    id: "us-1",
+    description: "Miami, FL 33101, USA",
+    postcode: "33101",
+    city: "Miami",
+    country: "US",
+    lat: 25.775084,
+    lng: -80.194702,
+  },
+  {
+    id: "us-2",
+    description: "Orlando, FL 32801, USA",
+    postcode: "32801",
+    city: "Orlando",
+    country: "US",
+    lat: 28.541665,
+    lng: -81.379236,
+  },
+  {
+    id: "us-3",
+    description: "Tampa, FL 33602, USA",
+    postcode: "33602",
+    city: "Tampa",
+    country: "US",
+    lat: 27.951,
+    lng: -82.457,
+  },
+  {
+    id: "us-4",
+    description: "New York, NY 10001, USA",
+    postcode: "10001",
+    city: "New York",
+    country: "US",
+    lat: 40.750742,
+    lng: -73.99653,
+  },
 ];
 
 export async function searchFakePlaces(q: string): Promise<PlaceSuggestion[]> {
@@ -90,11 +129,48 @@ export async function searchFakePlaces(q: string): Promise<PlaceSuggestion[]> {
   await new Promise((r) => setTimeout(r, 200));
 
   const results = PLACES.filter((p) => {
-    const hay = `${p.description} ${p.postcode ?? ""} ${
-      p.city ?? ""
+    const hay = `${p.description} ${p.postcode ?? ""} ${p.city ?? ""} ${
+      p.country ?? ""
     }`.toLowerCase();
     return hay.includes(query);
   }).slice(0, 6);
 
   return results;
+}
+
+// Helper used by LocationPicker for Enter/blur auto-resolve
+export async function resolvePlaceByFreeText(
+  q: string
+): Promise<PlaceSuggestion | null> {
+  const query = q.trim().toLowerCase();
+  if (!query) return null;
+
+  // Very light UK / US regexes (not exhaustive, just for demo)
+  const ukPostcodeRe = /^[a-z]{1,2}\d[a-z0-9]?\s*\d[a-z]{2}$/i; // e.g., SW1A 2AA
+  const usZipRe = /^\d{5}(-\d{4})?$/; // e.g., 33101 or 33101-1234
+
+  // 1) Exact postcode/ZIP match first
+  const exact = PLACES.find(
+    (p) =>
+      p.postcode?.toLowerCase().replace(/\s+/g, "") ===
+      query.replace(/\s+/g, "")
+  );
+  if (exact) return exact;
+
+  // 2) If looks like a UK postcode or US ZIP, pick the first that "starts with" (helps partials)
+  if (ukPostcodeRe.test(q) || usZipRe.test(q)) {
+    const starts = PLACES.find((p) =>
+      (p.postcode ?? "")
+        .toLowerCase()
+        .replace(/\s+/g, "")
+        .startsWith(query.replace(/\s+/g, ""))
+    );
+    if (starts) return starts;
+  }
+
+  // 3) Fallback: search by city/description substring
+  const byCity = PLACES.find((p) =>
+    `${p.description} ${p.city ?? ""}`.toLowerCase().includes(query)
+  );
+  return byCity ?? null;
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { User as UserIcon, LogOut } from "lucide-react";
+import { User as UserIcon, LogOut, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLogoutMutation } from "@/redux/api/authApi";
 import { apiSlice } from "@/redux/api/api";
@@ -13,13 +13,11 @@ import { toast } from "sonner";
 
 type Props = {
   tokenRemaining: number;
-  logoutAction: () => Promise<void>;
   profileHref?: string;
 };
 
 export default function ProfileDropdown({
   tokenRemaining,
-  logoutAction,
   profileHref = "/dashboard",
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -98,7 +96,7 @@ export default function ProfileDropdown({
             href={profileHref}
             className="flex w-full items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
           >
-            <UserIcon className="mr-2 w-5 h-5" />
+            <LayoutDashboard className="mr-2 w-5 h-5" />
             Dashboard
           </Link>
         </li>

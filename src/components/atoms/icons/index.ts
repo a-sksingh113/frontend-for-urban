@@ -4,3 +4,7 @@ export { default as PhoneIcon } from "./PhoneIcon";
 export { default as StarIcon } from "./StarIcon";
 export { default as CheckIcon } from "./CheckIcon";
 export { default as GoogleIcon } from "./GoogleIcon";
+export { default as EmailVerifyIcon } from "./EmailVerifyIcon";
+export { default as EmailWarningIcon } from "./EmailWarningIcon";
+export { default as VerifySealIcon } from "./VerifySealIcon";
+export { default as InfoCircleIcon } from "./InfoCircleIcon";

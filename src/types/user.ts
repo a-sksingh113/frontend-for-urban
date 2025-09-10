@@ -15,6 +15,7 @@ export interface User {
   tokensRemaining: number;
   tokenUsed: number;
   requestCount: number;
+  createdAt: string;
 }
 
 export interface ProfileResponse {

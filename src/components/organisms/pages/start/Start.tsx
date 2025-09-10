@@ -19,7 +19,6 @@ export default function Start({
   outOfTokens: boolean;
   tokensRemaining: number;
 }) {
-  console.log(request);
   return (
     <div className="min-h-[70vh] bg-gradient-to-b from-slate-50 to-white">
       <MaxWidthWrapper>

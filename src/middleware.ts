@@ -4,12 +4,14 @@ export default function middleware(request: NextRequest) {
   const token = request.cookies.get("token_middleware")?.value;
   const { pathname } = request.nextUrl;
 
-  // If token exists and user tries to visit /login or /signup, redirect to dashboard
+  // If token exists and user tries to visit these routes, redirect to dashboard
   if (
     token &&
     (pathname === "/login" ||
       pathname === "/signup" ||
-      pathname === "/forgot-password")
+      pathname === "/forgot-password" ||
+      pathname.startsWith("/confirm-email") ||
+      pathname.startsWith("/verify-email"))
   ) {
     const dashboardUrl = new URL("/", request.url);
     return NextResponse.redirect(dashboardUrl);
@@ -31,8 +33,10 @@ export const config = {
   matcher: [
     "/login",
     "/signup",
-    "/dashboard",
     "/forgot-password/:path*",
+    "/confirm-email/:path*",
+    "/verify-email/:path*",
+    "/dashboard",
     "/reset-password",
     "/results",
   ],

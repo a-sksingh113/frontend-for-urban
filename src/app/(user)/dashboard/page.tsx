@@ -1,7 +1,7 @@
 import { Dashboard } from "@/components/organisms/pages/dashboard";
 import type { StripeLog } from "@/components/molecules/pages/dashboard/StripeLogs";
 import { cookies } from "next/headers";
-import { getUserProfile } from "@/actions/userData";
+import { getUserHistory, getUserProfile } from "@/actions/userData";
 
 function mockLogs(): StripeLog[] {
   const now = Date.now();
@@ -41,8 +41,15 @@ export default async function DashboardPage() {
   const cookieStore = await cookies();
   const token = cookieStore.get("token_middleware")?.value;
   const profile = token ? await getUserProfile() : null;
-
+  const request = token ? await getUserHistory() : null;
   const plan = { name: "Starter", price: "$10 / mo" };
 
-  return <Dashboard user={profile?.user} plan={plan} logs={mockLogs()} />;
+  return (
+    <Dashboard
+      user={profile?.user}
+      plan={plan}
+      logs={mockLogs()}
+      request={request?.history}
+    />
+  );
 }

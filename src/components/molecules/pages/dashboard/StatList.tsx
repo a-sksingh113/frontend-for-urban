@@ -36,7 +36,7 @@ export default function StatList({ user }: Props) {
   ];
 
   return (
-    <Card className="divide-y divide-slate-200">
+    <Card>
       <div className="p-4">
         <Heading as="h3" className="text-xl">
           Usage

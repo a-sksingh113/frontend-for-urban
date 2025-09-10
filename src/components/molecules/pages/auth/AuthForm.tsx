@@ -63,7 +63,7 @@ export function AuthForm({ mode }: Props) {
         const response = await signup(formData).unwrap();
         if (response) {
           toast.success(response.message || "Signed up successfully!");
-          router.push("/login");
+          router.push(`/confirm-email/${encodeURIComponent(data.email)}`);
         }
       } else {
         const response = await login(formData).unwrap();
