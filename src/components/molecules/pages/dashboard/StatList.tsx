@@ -37,14 +37,17 @@ export default function StatList({ user }: Props) {
 
   return (
     <Card>
-      <div className="p-4">
-        <Heading as="h3" className="text-xl">
+      <div>
+        <Heading as="h3" className="text-xl mb-2">
           Usage
         </Heading>
       </div>
-      <ul className="p-4 space-y-3">
+      <ul className="space-y-3 divide-y divide-slate-200">
         {stats.map((s) => (
-          <li key={s.label} className="flex items-baseline justify-between">
+          <li
+            key={s.label}
+            className="flex items-baseline justify-between py-1.5"
+          >
             <Text className="font-medium">{s.label}</Text>
             <Text className="text-slate-900">{s.value}</Text>
           </li>

@@ -4,7 +4,16 @@ import { apiSlice } from "./api";
 type AuthResponse = { message: string };
 
 export type UpdateProfileRequest = Partial<
-  Pick<User, "fullName" | "phone" | "city" | "state" | "country" | "zipCode">
+  Pick<
+    User,
+    | "fullName"
+    | "phone"
+    | "city"
+    | "state"
+    | "country"
+    | "zipCode"
+    | "profilePhoto"
+  >
 >;
 
 export type UpdateProfileResponse = {

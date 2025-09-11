@@ -6,7 +6,7 @@ type Props = { title?: string; subtitle?: string };
 
 export default function DashboardHeader({
   title = "Dashboard",
-  subtitle = "Overview of your usage and plan",
+  subtitle = "Overview of your account usage and plan details",
 }: Props) {
   return (
     <header className="space-y-1">

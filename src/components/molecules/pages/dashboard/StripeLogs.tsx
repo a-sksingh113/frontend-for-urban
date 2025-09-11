@@ -49,7 +49,7 @@ export default function StripeLogs({ logs, onOpenMonthly, onOpenPayg }: Props) {
             setActive("monthly");
             onOpenMonthly?.();
           }}
-          className={cn(active === "monthly" && "ring-2 ring-blue-300")}
+          className={cn(active === "monthly" && "ring-2 ring-blue-500")}
         >
           Monthly
         </Button>
@@ -59,7 +59,7 @@ export default function StripeLogs({ logs, onOpenMonthly, onOpenPayg }: Props) {
             setActive("payg");
             onOpenPayg?.();
           }}
-          className={cn(active === "payg" && "ring-2 ring-blue-300")}
+          className={cn(active === "payg" && "ring-2 ring-blue-500")}
         >
           Pay-as-you-go
         </Button>

@@ -1,4 +1,5 @@
 "use client";
+import * as React from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useResetPasswordMutation } from "@/redux/api/authApi";
@@ -7,7 +8,7 @@ import { handleApiError } from "@/lib/handleApiError";
 import { Button, Card, Input } from "@/components/atoms";
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import Link from "next/link";
-import * as React from "react";
+import { ButtonWithLoading } from "@/components/molecules/global/reusable-ui";
 
 type FormValues = {
   password: string;
@@ -122,15 +123,13 @@ export default function SetPasswordForm({ resetToken }: SetPasswordFormProps) {
                   </p>
                 )}
               </div>
-
-              <Button
-                type="submit"
-                disabled={submitting}
-                className="mt-2 w-full rounded-lg px-4 py-3 text-base font-semibold
-                           disabled:opacity-70"
+              <ButtonWithLoading
+                className="w-full"
+                isLoading={submitting}
+                loadingText="Setting…"
               >
-                {submitting ? "Setting…" : "Set Password"}
-              </Button>
+                Set Password
+              </ButtonWithLoading>
             </form>
 
             {/* Back to login */}

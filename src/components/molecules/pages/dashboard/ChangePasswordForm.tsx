@@ -9,6 +9,7 @@ import { FormField } from "@/components/molecules/global/form/FormField";
 import { useChangePasswordMutation } from "@/redux/api/authApi";
 import { toast } from "sonner";
 import { handleApiError } from "@/lib/handleApiError";
+import { ButtonWithLoading } from "@/components/molecules/global/reusable-ui";
 
 const changePasswordSchema = z
   .object({
@@ -92,11 +93,13 @@ export default function ChangePasswordForm({ onSuccess, onCancel }: Props) {
         />
 
         <div className="flex gap-3 pt-2">
-          <Button type="submit" disabled={isSubmitting || isLoading}>
-            {isSubmitting || isLoading
-              ? "Changing Password..."
-              : "Change Password"}
-          </Button>
+          <ButtonWithLoading
+            size="md"
+            isLoading={isSubmitting || isLoading}
+            loadingText="Changing Password..."
+          >
+            Change Password
+          </ButtonWithLoading>
           {onCancel && (
             <Button
               type="button"

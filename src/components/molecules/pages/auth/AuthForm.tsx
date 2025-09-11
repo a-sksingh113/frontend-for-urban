@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Button, OrSeparator, Text } from "@/components/atoms";
+import { OrSeparator, Text } from "@/components/atoms";
 import { EmailField } from "./EmailField";
 import { PasswordField } from "./PasswordField";
 import { GoogleButton } from "./GoogleButton";
@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { handleApiError } from "@/lib/handleApiError";
 import { loginSchema, signupSchema } from "@/schemas/authSchema";
+import { ButtonWithLoading } from "@/components/molecules/global/reusable-ui";
 
 type Props = {
   mode: "login" | "signup" | "password-reset";
@@ -108,14 +109,15 @@ export function AuthForm({ mode }: Props) {
           </Link>
         </div>
       )}
-      <Button
-        type="submit"
+      <ButtonWithLoading
         className="w-full"
-        size="lg"
-        disabled={isSubmitting}
+        isLoading={isSubmitting}
+        loadingText={
+          primaryLabel === "Log in" ? "Logging in..." : "Creating account..."
+        }
       >
         {primaryLabel}
-      </Button>
+      </ButtonWithLoading>
 
       <div className="text-center">
         <Text className="text-sm text-slate-600">

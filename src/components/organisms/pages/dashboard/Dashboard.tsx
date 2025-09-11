@@ -27,11 +27,10 @@ export default function Dashboard({ plan, logs, user, request }: Props) {
           <DashboardHeader />
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <div className="md:col-span-2 space-y-6">
-              {user && <ProfileOverview user={user} />}
               {user && <StatList user={user} />}
               {request && (
                 <Card className="divide-y divide-slate-200">
-                  <div className="p-4">
+                  <div>
                     <Heading as="h3" className="text-xl mb-4">
                       My Previous Requests
                     </Heading>
@@ -40,6 +39,7 @@ export default function Dashboard({ plan, logs, user, request }: Props) {
                 </Card>
               )}
               <StripeLogs logs={logs} />
+              {user && <ProfileOverview user={user} />}
             </div>
 
             <aside className="space-y-6">

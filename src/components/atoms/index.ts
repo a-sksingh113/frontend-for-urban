@@ -11,3 +11,4 @@ export { default as Avatar } from "./Avatar";
 export { default as Rating } from "./Rating";
 export { default as Stat } from "./Stat";
 export { default as OrSeparator } from "./OrSeparator";
+export { default as Spinner } from "./Spinner";

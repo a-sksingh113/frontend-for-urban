@@ -12,6 +12,9 @@ import { handleApiError } from "@/lib/handleApiError";
 import { FormField } from "@/components/molecules/global/form/FormField";
 import { editProfileSchema } from "@/schemas/editProfileSchema";
 import { useUpdateProfileMutation } from "@/redux/api/authApi";
+import { ButtonWithLoading } from "@/components/molecules/global/reusable-ui";
+import UserProfilePicUpload from "./UserProfilePicUpload";
+import Image from "next/image";
 
 type Props = {
   user: User;
@@ -21,6 +24,7 @@ type Props = {
 
 export default function EditProfileForm({ user, onCancel, onSuccess }: Props) {
   const router = useRouter();
+  const [files, setFiles] = React.useState<File[]>([]);
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
   type FormValues = z.input<typeof editProfileSchema>;
 
@@ -42,25 +46,29 @@ export default function EditProfileForm({ user, onCancel, onSuccess }: Props) {
 
   const onSubmit: SubmitHandler<FormValues> = async (values) => {
     try {
-      const payload = {
-        fullName: values.fullName,
-        phone: values.phone,
-        city: values.city,
-        state: values.state,
-        country: values.country,
-        zipCode: values.zipCode,
-      };
+      const formData = new FormData();
+      formData.append("fullName", values.fullName || "");
+      formData.append("phone", values.phone || "");
+      formData.append("city", values.city || "");
+      formData.append("state", values.state || "");
+      formData.append("country", values.country || "");
+      formData.append("zipCode", values.zipCode || "");
 
-      const res = await updateProfile(payload).unwrap();
+      if (files.length > 0) {
+        formData.append("profilePhoto", files[0]);
+      }
 
-      onSuccess?.(res.user ?? payload);
+      const res = await updateProfile(
+        formData as unknown as Partial<User>
+      ).unwrap();
+
+      onSuccess?.(res.user ?? values);
       toast.success(res.message || "Profile updated");
       router.refresh();
     } catch (err) {
       handleApiError(err);
     }
   };
-
   return (
     <Card className="p-5 md:p-6 rounded-2xl border border-slate-200">
       <Heading as="h3" className="mb-4">
@@ -113,12 +121,32 @@ export default function EditProfileForm({ user, onCancel, onSuccess }: Props) {
             registration={register("zipCode", { maxLength: 20 })}
             error={errors.zipCode}
           />
+          <UserProfilePicUpload files={files} onFilesChange={setFiles} />
+
+          {user.profilePhoto && (
+            <div className="flex justify-center items-center flex-col">
+              <p className="text-sm text-muted-foreground mb-1">
+                Current Profile Picture
+              </p>
+              <Image
+                src={user.profilePhoto}
+                alt="Current profile"
+                className="w-24 h-24 rounded-full border border-gray-500 object-cover"
+                width={100}
+                height={100}
+              />
+            </div>
+          )}
         </div>
 
         <div className="flex gap-3">
-          <Button type="submit" disabled={isSubmitting || isLoading}>
-            {isSubmitting || isLoading ? "Updating..." : "Save Changes"}
-          </Button>
+          <ButtonWithLoading
+            size="md"
+            isLoading={isSubmitting || isLoading}
+            loadingText="Updating..."
+          >
+            Save Changes
+          </ButtonWithLoading>
           <Button
             type="button"
             variant="secondary"

@@ -21,14 +21,12 @@ function Field({
   badge?: React.ReactNode;
 }) {
   return (
-    <div className="space-y-1">
-      <div className="text-sm md:text-sm font-medium text-slate-500">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
+      <div className="sm:w-40 md:w-48 shrink-0 text-[13px] sm:text-sm font-medium text-slate-500">
         {label}
       </div>
-      <div className="flex items-center gap-2 text-sm text-slate-800">
-        <span>
-          {value ?? <span className="text-slate-400">Not provided</span>}
-        </span>
+      <div className="sm:flex-1 flex flex-wrap items-center gap-1 sm:gap-2 text-[13px] sm:text-sm text-slate-800">
+        {value ?? <span className="text-slate-400">Not provided</span>}
         {badge}
       </div>
     </div>
@@ -75,7 +73,7 @@ export default function ProfileOverview({ user }: Props) {
       <Card className="p-5 md:p-6 rounded-2xl border border-slate-200">
         <Heading as="h3">Profile</Heading>
 
-        <div className="mt-4 grid gap-6 md:grid-cols-[220px,1fr,1fr]">
+        <div className="mt-4 grid gap-4 md:grid-cols-[220px,1fr,1fr]">
           {/* Left: avatar + name */}
           <div className="flex items-center gap-4">
             <div className="relative h-16 w-16 overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-200">
@@ -135,13 +133,7 @@ export default function ProfileOverview({ user }: Props) {
 
             <Field
               label="Phone"
-              value={
-                user.phone ? (
-                  <a href={`tel:${user.phone}`} className="hover:underline">
-                    {user.phone}
-                  </a>
-                ) : undefined
-              }
+              value={user.phone ? <span>{user.phone}</span> : undefined}
             />
           </div>
 
@@ -161,7 +153,7 @@ export default function ProfileOverview({ user }: Props) {
             role="tab"
             aria-selected={editing}
             variant={editing ? "primary" : "secondary"}
-            className={editing ? "ring-1 ring-blue-500" : ""}
+            className={editing ? "ring-1 ring-blue-500" : "font-normal"}
             onClick={openEdit}
           >
             <Edit className="mr-2 w-5 h-5" />
@@ -172,7 +164,9 @@ export default function ProfileOverview({ user }: Props) {
             role="tab"
             aria-selected={showChangePassword}
             variant={showChangePassword ? "primary" : "secondary"}
-            className={showChangePassword ? "ring-1 ring-blue-500" : ""}
+            className={
+              showChangePassword ? "ring-1 ring-blue-500" : "font-normal"
+            }
             onClick={openChangePassword}
           >
             <Lock className="mr-2 w-5 h-5" />

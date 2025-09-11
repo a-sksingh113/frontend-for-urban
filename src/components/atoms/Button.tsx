@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 import { Slot } from "@radix-ui/react-slot";
 
-type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   asChild?: boolean;
   variant?: "primary" | "secondary" | "ghost" | "outline";
   size?: "sm" | "md" | "lg";
@@ -18,7 +18,7 @@ export default function Button({
   const Comp = asChild ? Slot : "button";
 
   const base =
-    "inline-flex items-center justify-center rounded-lg font-semibold transition-shadow focus:outline-none focus-visible:ring-2 ring-offset-2 disabled:opacity-50 cursor-pointer";
+    "inline-flex items-center justify-center rounded-lg font-semibold transition-shadow focus:outline-none focus-visible:ring-2 ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer";
   const sizes = {
     sm: "h-9 px-4 text-sm",
     md: "h-11 px-5 text-sm",
