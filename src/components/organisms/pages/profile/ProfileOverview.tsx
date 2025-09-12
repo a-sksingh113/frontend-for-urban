@@ -10,12 +10,10 @@ import {
   ProfileAddress,
   ProfileActions,
 } from "@/components/molecules/pages/profile";
-import { useRouter } from "next/navigation";
 
 type Props = { user?: User | null };
 
 export default function ProfileOverview({ user }: Props) {
-  const router = useRouter();
   if (!user) return null;
 
   return (
@@ -28,14 +26,7 @@ export default function ProfileOverview({ user }: Props) {
               <ProfileContact user={user} />
               <ProfileAddress user={user} />
             </div>
-            <ProfileActions
-              onEdit={() => {
-                router.push("/edit-profile");
-              }}
-              onChangePassword={() => {
-                router.push("/change-password");
-              }}
-            />
+            <ProfileActions />
           </Card>
         </div>
       </MaxWidthWrapper>

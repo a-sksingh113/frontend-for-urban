@@ -91,17 +91,6 @@ export default function ProfileDropdown({ tokenRemaining }: Props) {
             </span>
           </div>
         </li>
-
-        {/* Dashboard/Profile */}
-        <li role="option" aria-selected="false" onClick={handleLinkClick}>
-          <Link
-            href="/dashboard"
-            className="flex w-full items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
-          >
-            <LayoutDashboard className="mr-2 w-5 h-5" />
-            Dashboard
-          </Link>
-        </li>
         {/* Profile */}
         <li role="option" aria-selected="false" onClick={handleLinkClick}>
           <Link
@@ -112,7 +101,18 @@ export default function ProfileDropdown({ tokenRemaining }: Props) {
             Profile
           </Link>
         </li>
-        {/* Profile */}
+        {/* Dashboard/Profile */}
+        <li role="option" aria-selected="false" onClick={handleLinkClick}>
+          <Link
+            href="/dashboard"
+            className="flex w-full items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            <LayoutDashboard className="mr-2 w-5 h-5" />
+            Dashboard
+          </Link>
+        </li>
+
+        {/* History */}
         <li role="option" aria-selected="false" onClick={handleLinkClick}>
           <Link
             href="/history"
