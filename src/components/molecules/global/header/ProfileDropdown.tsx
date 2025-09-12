@@ -2,7 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { User as UserIcon, LogOut, LayoutDashboard } from "lucide-react";
+import {
+  User as UserIcon,
+  LogOut,
+  LayoutDashboard,
+  History,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLogoutMutation } from "@/redux/api/authApi";
 import { apiSlice } from "@/redux/api/api";
@@ -16,10 +21,7 @@ type Props = {
   profileHref?: string;
 };
 
-export default function ProfileDropdown({
-  tokenRemaining,
-  profileHref = "/dashboard",
-}: Props) {
+export default function ProfileDropdown({ tokenRemaining }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -93,14 +95,33 @@ export default function ProfileDropdown({
         {/* Dashboard/Profile */}
         <li role="option" aria-selected="false" onClick={handleLinkClick}>
           <Link
-            href={profileHref}
+            href="/dashboard"
             className="flex w-full items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
           >
             <LayoutDashboard className="mr-2 w-5 h-5" />
             Dashboard
           </Link>
         </li>
-
+        {/* Profile */}
+        <li role="option" aria-selected="false" onClick={handleLinkClick}>
+          <Link
+            href="/profile"
+            className="flex w-full items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            <UserIcon className="mr-2 w-5 h-5" />
+            Profile
+          </Link>
+        </li>
+        {/* Profile */}
+        <li role="option" aria-selected="false" onClick={handleLinkClick}>
+          <Link
+            href="/history"
+            className="flex w-full items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            <History className="mr-2 w-5 h-5" />
+            History
+          </Link>
+        </li>
         {/* Logout via Server Action */}
         <li role="option" aria-selected="false" onClick={handleLinkClick}>
           <button

@@ -9,7 +9,7 @@ type FormFieldProps = {
   type?: string;
   placeholder?: string;
   error?: FieldError;
-  registration: UseFormRegisterReturn;
+  registration?: UseFormRegisterReturn;
   className?: string;
   autoComplete?: string;
 };

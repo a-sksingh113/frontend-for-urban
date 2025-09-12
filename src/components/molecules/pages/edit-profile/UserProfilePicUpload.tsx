@@ -42,29 +42,31 @@ const UserProfilePicUpload: React.FC<UserProfilePicUploaderProps> = ({
   return (
     <div className="relative">
       <label className="inline-block text-sm font-medium text-slate-500 mb-1">
-        Upload Profile Photo
+        Upload Profile
       </label>
       <FileUpload
         maxFiles={1}
-        maxSize={1 * 1024 * 1024} // 1MB for profile pics
+        maxSize={2 * 1024 * 1024}
         accept="image/png,image/jpeg"
-        className="w-full"
+        className="w-full flex justify-center items-center"
         value={files}
         onValueChange={handleValueChange}
         onFileReject={onFileReject}
       >
-        <FileUploadDropzone>
+        <FileUploadDropzone className="w-[100px] h-[100px] rounded-full">
           <div className="flex flex-col items-center gap-1 text-center">
             <div className="flex items-center justify-center rounded-full border border-muted-foreground p-2.5">
-              <Upload className="size-6 text-muted-foreground" />
+              <Upload className="size-4 text-muted-foreground" />
             </div>
-            <p className="font-medium text-sm">Drag & drop files here</p>
-            <p className="text-muted-foreground text-xs">
+            <p className="font-medium text-sm sr-only">
+              Drag & drop files here
+            </p>
+            <p className="text-muted-foreground text-xs sr-only">
               Or click to browse (max 1 file, up to 1MB)
             </p>
           </div>
 
-          <FileUploadTrigger asChild>
+          <FileUploadTrigger asChild className="sr-only">
             <Button size="sm" variant="outline" className="mt-2 w-fit">
               Browse files
             </Button>

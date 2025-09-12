@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useResetPasswordMutation } from "@/redux/api/authApi";
 import { toast } from "sonner";
 import { handleApiError } from "@/lib/handleApiError";
-import { Button, Card, Input } from "@/components/atoms";
+import { Card, Input } from "@/components/atoms";
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper";
 import Link from "next/link";
 import { ButtonWithLoading } from "@/components/molecules/global/reusable-ui";

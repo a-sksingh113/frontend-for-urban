@@ -83,7 +83,6 @@ export function ResultCard({
           </div>
 
           {/* CTAs */}
-          {/* ✅ pinned to bottom via mt-auto */}
           <div className="mt-auto flex items-center gap-3">
             <Button asChild className="flex-1">
               <Link

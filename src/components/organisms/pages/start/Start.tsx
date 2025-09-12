@@ -54,7 +54,7 @@ export default function Start({
           )}
           <FindProForm token={token} outOfTokens={outOfTokens} />
         </section>
-        {token && (
+        {token && request && (
           <section className="py-8 md:py-12 border-t border-slate-200">
             <Heading as="h2" className="mb-4">
               My Previous Requests
