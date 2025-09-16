@@ -6,7 +6,7 @@ import { Header } from "@/components/organisms/global/header/Header";
 import { Footer } from "@/components/organisms/global/footer/Footer";
 import { Toaster } from "sonner";
 export const dynamic = "force-dynamic";
-
+//testing
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "700"],
