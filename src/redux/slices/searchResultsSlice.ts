@@ -52,16 +52,21 @@ export const selectSuggestions = createSelector(
 
 // 2) map raw suggestions -> your card's Pro type (at render time only)
 export const selectPros = createSelector(selectSuggestions, (sugs): Pro[] =>
-  sugs.map((s) => ({
-    id: s.place_id,
-    name: s.name,
-    rating: s.rating ?? 0,
-    isOpen: String(s.availability).toLowerCase() === "yes",
-    tel: s.formatted_phone_number || undefined,
-    bookHref: s.website || undefined,
-    imageUrl: s.bussiness_shop_image || undefined,
-    distanceKm: typeof s.distance === "number" ? s.distance : undefined,
-  }))
+  sugs.map((s) => {
+    const openingHours = s.details?.currentOpeningHours;
+    return {
+      id: s.place_id,
+      name: s.name,
+      rating: s.rating ?? 0,
+      isOpen: openingHours?.openNow ?? null,
+      tel: s.details?.internationalPhoneNumber || undefined,
+      bookHref: s.details?.websiteUri || undefined,
+      imageUrl: s.photoUrl || undefined,
+      distanceKm:
+        typeof s.distanceMeters === "number" ? s.distanceMeters : undefined,
+      totalRating: s.user_ratings_total,
+    };
+  })
 );
 
 export const selectCategory = createSelector(

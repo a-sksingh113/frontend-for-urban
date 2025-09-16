@@ -100,3 +100,129 @@
     transform: rotate(90deg);
   }
 }
+
+/* searching-overlay utilities */
+@layer utilities {
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .radar,
+    .radar::before,
+    .radar::after,
+    .progress-anim {
+      animation: none !important;
+    }
+  }
+
+  .radar {
+    position: relative;
+    border-radius: 9999px;
+    background: radial-gradient(
+        closest-side,
+        rgba(59, 130, 246, 0.08),
+        transparent 65%
+      ),
+      radial-gradient(
+        circle at 50% 50%,
+        rgba(59, 130, 246, 0.06),
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 50% 50%,
+        rgba(59, 130, 246, 0.04),
+        transparent 20%
+      );
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.06);
+  }
+
+  /* Sweep arm */
+  .radar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background: conic-gradient(
+      from 0deg,
+      rgba(59, 130, 246, 0.35),
+      rgba(59, 130, 246, 0) 40%
+    );
+    animation: _radar_sweep 2.2s linear infinite;
+    will-change: transform;
+  }
+
+  /* Blinking dots (single layer for minimal DOM) */
+  .radar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background: radial-gradient(
+        circle at 28% 32%,
+        rgba(37, 99, 235, 0.95) 0 4px,
+        transparent 5px
+      ),
+      radial-gradient(
+        circle at 68% 40%,
+        rgba(37, 99, 235, 0.95) 0 4px,
+        transparent 5px
+      ),
+      radial-gradient(
+        circle at 44% 70%,
+        rgba(37, 99, 235, 0.95) 0 4px,
+        transparent 5px
+      ),
+      radial-gradient(
+        circle at 62% 74%,
+        rgba(37, 99, 235, 0.95) 0 4px,
+        transparent 5px
+      );
+    filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.6));
+    animation: _radar_blink 1.6s ease-in-out infinite alternate;
+  }
+
+  @keyframes _radar_sweep {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes _radar_blink {
+    from {
+      opacity: 0.7;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .progress-anim {
+    animation: _progress 2.3s ease-in-out infinite;
+    will-change: transform, width;
+  }
+
+  @keyframes _progress {
+    0% {
+      width: 8%;
+      transform: translateX(0%);
+    }
+    40% {
+      width: 55%;
+      transform: translateX(0%);
+    }
+    60% {
+      width: 55%;
+      transform: translateX(25%);
+    }
+    100% {
+      width: 8%;
+      transform: translateX(100%);
+    }
+  }
+
+  .step-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+    background: #3b82f6; /* blue-500 */
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  }
+}

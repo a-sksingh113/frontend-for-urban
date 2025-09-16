@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { FileText, Phone, MapPin, CheckIcon, Star } from "lucide-react";
+import { formatDistance } from "@/lib/formatDistance";
 
 type Props = Pro;
 
@@ -18,7 +19,9 @@ export function ResultCard({
   tel,
   bookHref,
   distanceKm,
+  totalRating,
 }: Props) {
+  console.log(bookHref);
   return (
     <article aria-labelledby={`${id}-name`}>
       <Card
@@ -43,10 +46,8 @@ export function ResultCard({
         </div>
 
         {/* Content */}
-        {/* ✅ let content grow and push CTAs to bottom */}
         <div className="p-5 flex flex-col grow">
           <div className="mb-2 flex items-start justify-between gap-3">
-            {/* ✅ clamp to 2 lines so varying names don’t change card height */}
             <Heading
               as="h4"
               id={`${id}-name`}
@@ -56,19 +57,23 @@ export function ResultCard({
             </Heading>
 
             <span className="shrink-0">
-              <Badge variant={isOpen ? "success" : "neutral"}>
-                <CheckIcon className="inline-block h-3.5 w-3.5" />
-                {isOpen ? "Available" : "Unavailable"}
-              </Badge>
+              {isOpen !== null ? (
+                <Badge variant={isOpen ? "success" : "neutral"}>
+                  <CheckIcon className="inline-block h-3.5 w-3.5" />
+                  {isOpen ? "Available" : "Unavailable"}
+                </Badge>
+              ) : null}
             </span>
           </div>
 
           {/* Rating + distance */}
           <div className="mb-4 flex flex-wrap items-center gap-3 text-sm text-slate-600">
             <span className="inline-flex items-center gap-1">
-              <Star className="mr-0.5 h-4 w-4 text-amber-500" />
-              <span className="font-medium text-slate-800">
-                {Number.isFinite(rating) ? rating.toFixed(1) : "—"}
+              <Star className="h-4 w-4 text-amber-500" />
+              <span className="font-medium text-slate-800 flex items-baseline gap-1">
+                <span>{Number.isFinite(rating) ? rating.toFixed(1) : "—"}</span>
+                <span className="text-slate-400">/</span>
+                <span>{totalRating}</span>
               </span>
             </span>
             {typeof distanceKm === "number" && (
@@ -76,7 +81,7 @@ export function ResultCard({
                 <span className="text-slate-300">|</span>
                 <span className="inline-flex items-center gap-1">
                   <MapPin className="h-4 w-4 text-slate-400" />
-                  {distanceKm.toFixed(1)} km away
+                  {formatDistance(distanceKm)}
                 </span>
               </>
             )}
@@ -84,27 +89,44 @@ export function ResultCard({
 
           {/* CTAs */}
           <div className="mt-auto flex items-center gap-3">
-            <Button asChild className="flex-1">
-              <Link
-                href={bookHref ?? "#"}
-                aria-label={`Get quote from ${name}`}
-                className="inline-flex items-center justify-center gap-2"
-              >
-                <FileText className="h-4 w-4" aria-hidden="true" />
-                <span>Get Quote</span>
-              </Link>
-            </Button>
-
-            {tel && (
-              <Button variant="secondary" asChild className="flex-1">
+            {bookHref ? (
+              <Button asChild className="flex-1">
                 <Link
+                  href={bookHref}
+                  aria-label={`Get quote from ${name}`}
+                  className="inline-flex items-center justify-center gap-2"
+                >
+                  <FileText className="h-4 w-4" aria-hidden="true" />
+                  <span>Get Quote</span>
+                </Link>
+              </Button>
+            ) : (
+              <Button className="flex-1" disabled aria-disabled="true">
+                <FileText className="h-4 w-4 mr-2" aria-hidden="true" />{" "}
+                <span>Get Quote</span>
+              </Button>
+            )}
+
+            {tel ? (
+              <Button variant="secondary" asChild className="flex-1">
+                <a
                   href={`tel:${tel}`}
                   aria-label={`Call ${name} now`}
                   className="inline-flex items-center justify-center gap-2"
                 >
                   <Phone className="h-4 w-4" aria-hidden="true" />
                   <span>Call Now</span>
-                </Link>
+                </a>
+              </Button>
+            ) : (
+              <Button
+                variant="secondary"
+                className="flex-1"
+                disabled
+                aria-disabled="true"
+              >
+                <Phone className="h-4 w-4 mr-2" aria-hidden="true" />
+                <span>Call Now</span>
               </Button>
             )}
           </div>

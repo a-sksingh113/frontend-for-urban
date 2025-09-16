@@ -1,11 +1,12 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import * as React from "react";
 
 type Props = {
   open: boolean;
-  locationLabel?: string; // e.g., "Kolkata" or "your area"
-  onCancel?: () => void; // optional cancel
+  locationLabel?: string;
+  onCancel?: () => void;
 };
 
 export default function SearchingOverlay({
@@ -172,11 +173,6 @@ function Pin(props: React.HtmlHTMLAttributes<HTMLSpanElement>) {
       <span className="relative z-10 h-2.5 w-2.5 rounded-full bg-blue-600 shadow-sm shadow-blue-400/40 [animation:rise_1.6s_ease-in-out_infinite]" />
     </span>
   );
-}
-
-// tiny helper (keeps this file self-contained)
-function cn(...classes: Array<string | undefined | null | false>) {
-  return classes.filter(Boolean).join(" ");
 }
 
 function ProgressBar() {

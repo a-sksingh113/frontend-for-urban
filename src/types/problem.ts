@@ -11,6 +11,14 @@ export interface ProblemDTO {
 
 export type Availability = "yes" | "no";
 
+export interface Details {
+  internationalPhoneNumber: string;
+  websiteUri: string;
+  currentOpeningHours: {
+    openNow: boolean;
+  };
+}
+
 export interface PlaceSuggestion {
   place_id: string;
   name: string;
@@ -19,9 +27,10 @@ export interface PlaceSuggestion {
   distance: number;
   availability: Availability;
   user_ratings_total: number;
-  formatted_phone_number: string;
+  details: Details;
   website: string;
-  bussiness_shop_image: string;
+  photoUrl: string;
+  distanceMeters: number;
 }
 
 export interface SubmitProblemResponse {

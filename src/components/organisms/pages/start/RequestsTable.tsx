@@ -28,12 +28,14 @@ function toRowStatus(apiStatus?: string): Row["status"] {
 
 export default function RequestsTable({ request }: Props) {
   const rows: Row[] =
-    request?.map((h) => ({
-      id: h.id,
-      thumb: h.problem?.imageUrl || "/placeholder.png",
-      location: h.problem?.location || "—",
-      status: toRowStatus(h.status),
-    })) ?? [];
+    request
+      ?.map((h) => ({
+        id: h.id,
+        thumb: h.problem?.imageUrl || "/placeholder.png",
+        location: h.problem?.location || "—",
+        status: toRowStatus(h.status),
+      }))
+      .slice(0, 1) ?? [];
 
   return (
     <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
@@ -50,7 +52,8 @@ export default function RequestsTable({ request }: Props) {
           {rows.length === 0 ? (
             <tr>
               <td colSpan={4} className="px-4 py-8 text-center text-slate-500">
-                No history found.
+                You haven’t made any requests yet — snap your first photo and
+                find trusted pros!
               </td>
             </tr>
           ) : (

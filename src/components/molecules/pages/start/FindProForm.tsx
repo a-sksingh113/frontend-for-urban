@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import * as React from "react";
@@ -13,6 +14,7 @@ import SearchingOverlay from "@/components/molecules/global/animation/SearchingO
 import { useAppDispatch } from "@/redux/hook";
 import { setResults } from "@/redux/slices/searchResultsSlice";
 import { saveResults } from "@/lib/resultsCache";
+import { Info } from "lucide-react";
 
 type Props = {
   token: string | undefined;
@@ -127,11 +129,15 @@ export default function FindProForm({ token, outOfTokens }: Props) {
                   field: { value: coordsVal, onChange: setCoords },
                 }) => (
                   <LocationPicker
-                    postcode={value}
-                    onPostcodeChange={onChange}
-                    coords={coordsVal}
-                    onCoordsChange={setCoords}
-                    disabled={formDisabled}
+                    onPlaceSelected={({ details, inputText }) => {
+                      const loc = details?.location ?? null;
+                      console.log(loc);
+                      setCoords(loc);
+                      onChange(details?.formattedAddress ?? inputText ?? "");
+                    }}
+                    onCleared={() => {
+                      setCoords(null);
+                    }}
                   />
                 )}
               />
@@ -143,6 +149,14 @@ export default function FindProForm({ token, outOfTokens }: Props) {
           />
         </fieldset>
       </form>
+      {!canSubmit && (
+        <div className="mt-2 md:mt-5 flex items-start gap-2 bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-2 rounded-md text-sm w-full sm:w-auto">
+          <Info size={16} className="mt-0.5" />
+          <span>
+            Upload a photo and select a location to enable get 3 leads.
+          </span>
+        </div>
+      )}
       <SearchingOverlay
         open={isLoading || isNavigating}
         locationLabel={watch("postcode") || "your area"}

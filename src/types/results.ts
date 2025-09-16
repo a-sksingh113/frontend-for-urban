@@ -8,6 +8,7 @@ export type Pro = {
   imageUrl?: string;
   distanceKm?: number;
   tags?: string[];
+  totalRating: number;
 };
 
 export type ResultsModel = {
