@@ -75,7 +75,7 @@ export default function PlacesDropdown({
               role="option"
               aria-selected={isSelected}
               className={cn(
-                "flex w-full items-start gap-2 px-4 py-2 cursor-pointer",
+                "flex w-full items-center sm:items-start gap-2 px-4 py-2 cursor-pointer",
                 isSelected && "bg-blue-600",
                 isFocused && "ring ring-slate-300",
                 !isSelected && "hover:bg-gray-100"
@@ -86,7 +86,7 @@ export default function PlacesDropdown({
             >
               <MapPin
                 className={cn(
-                  "mt-0.5 h-4 w-4",
+                  "shrink-0 sm:mt-1.5 h-4 w-4",
                   isSelected ? "text-white" : "text-gray-500"
                 )}
               />

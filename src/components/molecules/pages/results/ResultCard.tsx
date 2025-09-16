@@ -32,15 +32,16 @@ export function ResultCard({
           "transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus-within:ring-2 focus-within:ring-blue-100"
         )}
       >
-        {/* Top image (16:9) */}
-        <div className="relative aspect-[16/9] w-full bg-slate-100">
+        {/* Top image */}
+        <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100">
           {imageUrl ? (
             <Image
               src={imageUrl}
               alt={name}
-              className="h-full w-full object-cover"
-              width={400}
-              height={225}
+              fill
+              sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
+              className="object-cover object-center"
+              priority={false}
             />
           ) : null}
         </div>

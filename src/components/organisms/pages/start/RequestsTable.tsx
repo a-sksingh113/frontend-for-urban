@@ -35,7 +35,7 @@ export default function RequestsTable({ request }: Props) {
         location: h.problem?.location || "—",
         status: toRowStatus(h.status),
       }))
-      .slice(0, 1) ?? [];
+      .slice(0, 3) ?? [];
 
   return (
     <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
