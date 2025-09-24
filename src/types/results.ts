@@ -2,13 +2,15 @@ export type Pro = {
   id: string;
   name: string;
   rating: number;
-  isOpen: boolean;
+  isOpen?: boolean;
   tel?: string;
   bookHref?: string;
   imageUrl?: string;
-  distanceKm?: number;
+  address?: string;
+  mapsHref?: string;
   tags?: string[];
-  totalRating: number;
+  totalRating?: number;
+  distance?: number;
 };
 
 export type ResultsModel = {

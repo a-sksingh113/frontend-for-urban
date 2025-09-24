@@ -7,6 +7,7 @@ import {
   LogOut,
   LayoutDashboard,
   History,
+  Search,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLogoutMutation } from "@/redux/api/authApi";
@@ -42,7 +43,6 @@ export default function ProfileDropdown({ tokenRemaining }: Props) {
   const handleLinkClick = () => setIsOpen(false);
 
   const handleLogout = async () => {
-    console.log("first");
     try {
       setIsOpen(false);
       const res = await logout().unwrap();
@@ -101,17 +101,26 @@ export default function ProfileDropdown({ tokenRemaining }: Props) {
             Profile
           </Link>
         </li>
-        {/* Dashboard/Profile */}
+        {/* Account/Profile */}
         <li role="option" aria-selected="false" onClick={handleLinkClick}>
           <Link
             href="/dashboard"
             className="flex w-full items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
           >
             <LayoutDashboard className="mr-2 w-5 h-5" />
-            Dashboard
+            Account
           </Link>
         </li>
-
+        {/* Fixer */}
+        <li role="option" aria-selected="false" onClick={handleLinkClick}>
+          <Link
+            href="/fix"
+            className="flex w-full items-center px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
+          >
+            <Search className="mr-2 w-5 h-5" />
+            Find Fixer
+          </Link>
+        </li>
         {/* History */}
         <li role="option" aria-selected="false" onClick={handleLinkClick}>
           <Link
@@ -122,6 +131,7 @@ export default function ProfileDropdown({ tokenRemaining }: Props) {
             History
           </Link>
         </li>
+
         {/* Logout via Server Action */}
         <li role="option" aria-selected="false" onClick={handleLinkClick}>
           <button

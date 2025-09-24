@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import * as React from "react";
+import { RemoveScroll } from "react-remove-scroll";
 
 type Props = {
   open: boolean;
@@ -17,110 +18,114 @@ export default function SearchingOverlay({
   if (!open) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-[1000] bg-slate-900/70 backdrop-blur-sm"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Searching for local pros"
-    >
-      <div className="absolute inset-0 flex items-center justify-center p-6">
-        <div className="w-full max-w-lg rounded-2xl bg-white shadow-2xl ring-1 ring-slate-200">
-          {/* Header */}
-          <div className="px-6 pt-6 text-center">
-            <p className="text-sm font-medium text-blue-600">Working on it…</p>
-            <h2 className="mt-1 text-2xl font-bold text-slate-900">
-              Finding 3 ranked pros near{" "}
-              <span className="text-blue-600">{locationLabel}</span>
-            </h2>
-            <p className="mt-2 text-slate-600">
-              We’re analyzing your image and scanning trusted providers. Hang
-              tight
-              <AnimatedDots />
-            </p>
-          </div>
+    <RemoveScroll enabled={open} removeScrollBar={open}>
+      <div
+        className="fixed inset-0 z-[1000] bg-slate-900/70 backdrop-blur-sm"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Searching for local pros"
+      >
+        <div className="absolute inset-0 flex items-center justify-center p-0 sm:p-6">
+          <div className="w-full max-w-lg h-full sm:h-auto rounded-2xl bg-white shadow-2xl ring-1 ring-slate-200 flex flex-col justify-center overflow-y-auto overscroll-y-contain">
+            {/* Header */}
+            <div className="px-6 pt-6 text-center">
+              <p className="text-sm font-medium text-blue-600">
+                Working on it…
+              </p>
+              <h2 className="mt-1 text-2xl font-bold text-slate-900">
+                Finding 3 ranked pros near{" "}
+                <span className="text-blue-600">{locationLabel}</span>
+              </h2>
+              <p className="mt-2 text-slate-600">
+                We’re analyzing your image and scanning trusted providers. Hang
+                tight
+                <AnimatedDots />
+              </p>
+            </div>
 
-          {/* Animation */}
-          <div className="px-6 py-8">
-            <RadarAnimation />
-          </div>
+            {/* Animation */}
+            <div className="px-6 py-8">
+              <RadarAnimation />
+            </div>
 
-          {/* Progress + steps */}
-          <div className="px-6 pb-6">
-            <ProgressBar />
+            {/* Progress + steps */}
+            <div className="px-6 pb-6">
+              <ProgressBar />
 
-            <ul className="mt-4 space-y-2 text-sm">
-              <StepItem label="Analyzing the issue" active />
-              <StepItem label="Matching nearby pros" />
-              <StepItem label="Ranking results for quality & distance" />
-            </ul>
+              <ul className="mt-4 space-y-2 text-sm">
+                <StepItem label="Analyzing the issue" active />
+                <StepItem label="Matching nearby pros" />
+                <StepItem label="Ranking results for quality & distance" />
+              </ul>
 
-            <div className="mt-6 flex items-center justify-center gap-3">
-              {onCancel ? (
-                <button
-                  onClick={onCancel}
-                  className="h-10 rounded-lg border border-slate-300 px-4 text-slate-600 hover:bg-slate-50"
-                >
-                  Cancel
-                </button>
-              ) : null}
-              <span className="text-xs text-slate-500" aria-live="polite">
-                This usually takes a few seconds.
-              </span>
+              <div className="mt-6 flex items-center justify-center gap-3">
+                {onCancel ? (
+                  <button
+                    onClick={onCancel}
+                    className="h-10 rounded-lg border border-slate-300 px-4 text-slate-600 hover:bg-slate-50"
+                  >
+                    Cancel
+                  </button>
+                ) : null}
+                <span className="text-xs text-slate-500" aria-live="polite">
+                  This usually takes a few seconds.
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Component-scoped animations */}
-      <style jsx>{`
-        @keyframes sweep {
-          0% {
-            transform: rotate(0deg);
+        {/* Component-scoped animations */}
+        <style jsx>{`
+          @keyframes sweep {
+            0% {
+              transform: rotate(0deg);
+            }
+            100% {
+              transform: rotate(360deg);
+            }
           }
-          100% {
-            transform: rotate(360deg);
+          @keyframes pulseOut {
+            0% {
+              transform: scale(0.7);
+              opacity: 0.6;
+            }
+            70% {
+              opacity: 0.15;
+            }
+            100% {
+              transform: scale(2.2);
+              opacity: 0;
+            }
           }
-        }
-        @keyframes pulseOut {
-          0% {
-            transform: scale(0.7);
-            opacity: 0.6;
+          @keyframes rise {
+            0% {
+              transform: translateY(2px);
+            }
+            50% {
+              transform: translateY(-2px);
+            }
+            100% {
+              transform: translateY(2px);
+            }
           }
-          70% {
-            opacity: 0.15;
+          @keyframes progress {
+            0% {
+              width: 10%;
+            }
+            30% {
+              width: 45%;
+            }
+            60% {
+              width: 75%;
+            }
+            100% {
+              width: 90%;
+            }
           }
-          100% {
-            transform: scale(2.2);
-            opacity: 0;
-          }
-        }
-        @keyframes rise {
-          0% {
-            transform: translateY(2px);
-          }
-          50% {
-            transform: translateY(-2px);
-          }
-          100% {
-            transform: translateY(2px);
-          }
-        }
-        @keyframes progress {
-          0% {
-            width: 10%;
-          }
-          30% {
-            width: 45%;
-          }
-          60% {
-            width: 75%;
-          }
-          100% {
-            width: 90%;
-          }
-        }
-      `}</style>
-    </div>
+        `}</style>
+      </div>
+    </RemoveScroll>
   );
 }
 

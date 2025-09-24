@@ -15,6 +15,13 @@ import { useAppDispatch } from "@/redux/hook";
 import { setResults } from "@/redux/slices/searchResultsSlice";
 import { saveResults } from "@/lib/resultsCache";
 import { Info } from "lucide-react";
+import {
+  clearFileDraft,
+  dataUrlToFile,
+  loadFileDraft,
+  saveFileDraft,
+  serializeFirstFile,
+} from "@/lib/startDraft";
 
 type Props = {
   token: string | undefined;
@@ -29,7 +36,7 @@ type FormValues = {
 };
 
 export default function FindProForm({ token, outOfTokens }: Props) {
-  const { control, watch, handleSubmit } = useForm<FormValues>({
+  const { control, watch, handleSubmit, setValue } = useForm<FormValues>({
     defaultValues: {
       files: [],
       postcode: "",
@@ -43,14 +50,42 @@ export default function FindProForm({ token, outOfTokens }: Props) {
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const [isNavigating, setIsNavigating] = React.useState(false);
+  const [locationSelectingLoading, setLocationSelectingLoading] =
+    React.useState(false);
 
   const files = watch("files");
   const coords = watch("coords");
   const formDisabled = outOfTokens || isLoading;
   const canSubmit = files?.length > 0 && coords !== null;
 
+  // --- Rehydrate file only on mount ---
+  React.useEffect(() => {
+    (async () => {
+      const persisted = loadFileDraft();
+      if (persisted) {
+        try {
+          const f = await dataUrlToFile(persisted);
+          setValue("files", [f], { shouldDirty: true });
+        } catch {
+          clearFileDraft();
+        }
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // --- Persist file on change ---
+  React.useEffect(() => {
+    (async () => {
+      const persisted = await serializeFirstFile(files);
+      saveFileDraft(persisted);
+    })();
+  }, [files]);
+
   const onSubmit = async (data: FormValues) => {
     if (!token) {
+      const persisted = await serializeFirstFile(watch("files"));
+      saveFileDraft(persisted);
       const nextUrl =
         pathname +
         (searchParams?.toString() ? `?${searchParams.toString()}` : "");
@@ -85,8 +120,10 @@ export default function FindProForm({ token, outOfTokens }: Props) {
 
     try {
       const res = await submitProblem({ data: formData }).unwrap();
+      console.log(res);
       dispatch(setResults(res));
       saveResults(res);
+      clearFileDraft();
       setIsNavigating(true);
       router.push("/results");
       router.refresh();
@@ -131,12 +168,14 @@ export default function FindProForm({ token, outOfTokens }: Props) {
                   <LocationPicker
                     onPlaceSelected={({ details, inputText }) => {
                       const loc = details?.location ?? null;
-                      console.log(loc);
                       setCoords(loc);
                       onChange(details?.formattedAddress ?? inputText ?? "");
                     }}
                     onCleared={() => {
                       setCoords(null);
+                    }}
+                    onLoading={(loading) => {
+                      setLocationSelectingLoading(loading);
                     }}
                   />
                 )}
@@ -144,19 +183,22 @@ export default function FindProForm({ token, outOfTokens }: Props) {
             )}
           />
           <GetLeadsCTA
-            disabled={outOfTokens || isLoading || !canSubmit}
+            disabled={
+              outOfTokens || isLoading || !canSubmit || locationSelectingLoading
+            }
             label={outOfTokens ? "Buy Tokens to Continue" : "Get 3 Leads"}
           />
         </fieldset>
       </form>
-      {!canSubmit && (
+      {/* {!canSubmit && (
         <div className="mt-2 md:mt-5 flex items-start gap-2 bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-2 rounded-md text-sm w-full sm:w-auto">
           <Info size={16} className="mt-0.5" />
           <span>
             Upload a photo and select a location to enable get 3 leads.
           </span>
         </div>
-      )}
+      )} */}
+
       <SearchingOverlay
         open={isLoading || isNavigating}
         locationLabel={watch("postcode") || "your area"}

@@ -48,6 +48,7 @@ export type AutocompleteOptions = {
   languageCode?: string;
   regionCode?: string;
   inputOffset?: number;
+  signal?: AbortSignal;
 };
 
 export async function autocompletePlacesAction(
@@ -82,6 +83,7 @@ export async function autocompletePlacesAction(
     regionCode: opts.regionCode,
     inputOffset:
       typeof opts.inputOffset === "number" ? opts.inputOffset : undefined,
+    signal: opts.signal,
   };
 
   try {
@@ -132,7 +134,12 @@ export async function autocompletePlacesAction(
 
 export async function getPlaceDetailsAction(
   placeResourceOrId: string,
-  opts?: { languageCode?: string; regionCode?: string; sessionToken?: string }
+  opts?: {
+    languageCode?: string;
+    regionCode?: string;
+    sessionToken?: string;
+    signal?: AbortSignal;
+  }
 ): Promise<{
   id: string | null;
   displayName: string | null;
@@ -148,16 +155,12 @@ export async function getPlaceDetailsAction(
 
   const fieldMask = "id,displayName,formattedAddress,location,types";
 
-  // NOTE:
-  // Depending on the SDK version, session tokens for getPlace are either:
-  //   - a request field (sessionToken), or
-  //   - sent via 'X-Goog-Session-Token' header.
-  // We add both in a backward/forward compatible way.
   const request: any = {
     name,
     languageCode: opts?.languageCode,
     regionCode: opts?.regionCode,
     sessionToken: opts?.sessionToken,
+    signal: opts?.signal,
   };
 
   const headers: Record<string, string> = { "X-Goog-FieldMask": fieldMask };

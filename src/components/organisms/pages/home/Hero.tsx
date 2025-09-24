@@ -35,7 +35,7 @@ export function Hero() {
             subtitle="Connect with verified professionals in your area. Snap, drop location, get matched with top-rated pros instantly."
           />
           <div className="space-y-3.5">
-            <HeroPrimaryCTA label="Start Matching" href="/start" />
+            <HeroPrimaryCTA label="Start Matching" href="/fix" />
             {/* <HeroSecondaryCTA /> */}
           </div>
         </div>

@@ -18,10 +18,9 @@ export function ResultCard({
   isOpen,
   tel,
   bookHref,
-  distanceKm,
+  distance,
   totalRating,
 }: Props) {
-  console.log(bookHref);
   return (
     <article aria-labelledby={`${id}-name`}>
       <Card
@@ -77,12 +76,12 @@ export function ResultCard({
                 <span>{totalRating}</span>
               </span>
             </span>
-            {typeof distanceKm === "number" && (
+            {typeof distance === "number" && (
               <>
                 <span className="text-slate-300">|</span>
                 <span className="inline-flex items-center gap-1">
                   <MapPin className="h-4 w-4 text-slate-400" />
-                  {formatDistance(distanceKm)}
+                  {formatDistance(distance)}
                 </span>
               </>
             )}
@@ -94,6 +93,8 @@ export function ResultCard({
               <Button asChild className="flex-1">
                 <Link
                   href={bookHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={`Get quote from ${name}`}
                   className="inline-flex items-center justify-center gap-2"
                 >

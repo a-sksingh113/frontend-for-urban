@@ -9,7 +9,7 @@ import {
   selectLocationLabel,
   selectTokenBalance,
 } from "@/redux/slices/searchResultsSlice";
-import { readResults } from "@/lib/resultsCache";
+import { clearResults, readResults } from "@/lib/resultsCache";
 import {
   ResultsSummary,
   ResultGrid,
@@ -33,13 +33,16 @@ export function ResultsClient() {
   const locationLabel = useAppSelector(selectLocationLabel);
   const tokenBalance = useAppSelector(selectTokenBalance);
 
-  // Prevent EmptyState flash: wait until we've checked sessionStorage
   const [checkedCache, setCheckedCache] = React.useState(false);
 
   React.useEffect(() => {
     if (!response) {
       const cached = readResults();
-      if (cached) dispatch(setResults(cached));
+      if (cached) {
+        dispatch(setResults(cached));
+      } else {
+        clearResults();
+      }
     }
     setCheckedCache(true);
   }, [response, dispatch]);
@@ -64,15 +67,17 @@ export function ResultsClient() {
   // EmptyState AFTER we've checked cache
   if (isError || pros.length === 0) {
     return (
-      <div className="bg-white">
-        <div className="mx-auto max-w-5xl p-6">
-          <EmptyState
-            title="No results to show"
-            subtitle="Start a new request to see matched pros."
-            ctaHref="/start"
-          />
-        </div>
-      </div>
+      <section className="h-full bg-gradient-to-b from-slate-100 to-slate-50">
+        <MaxWidthWrapper>
+          <div className="flex min-h-[calc(100vh-8rem)] items-center justify-center">
+            <EmptyState
+              title="No nearby professionals found"
+              subtitle="We couldn't find any matching pros in your area for the issue you shared. You can try again with a different location or submit a new request."
+              ctaHref="/fix"
+            />
+          </div>
+        </MaxWidthWrapper>
+      </section>
     );
   }
 

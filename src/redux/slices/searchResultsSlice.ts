@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createSelector } from "@reduxjs/toolkit";
-import type { SubmitProblemResponse, PlaceSuggestion } from "@/types/problem";
 import type { RootState } from "@/redux/store";
 import type { Pro } from "@/types/results";
+import type { SubmitProblemResponse, Place } from "@/types/problem";
 
 type SearchState = {
   response: SubmitProblemResponse | null;
@@ -25,7 +25,6 @@ export const searchResultsSlice = createSlice({
     setError: (state, action: PayloadAction<boolean>) => {
       state.isError = action.payload;
     },
-    // payload is EXACT backend response
     setResults: (state, action: PayloadAction<SubmitProblemResponse>) => {
       state.response = action.payload;
       state.isError = false;
@@ -39,39 +38,45 @@ export const { setLoading, setError, setResults, resetResults } =
 
 export default searchResultsSlice.reducer;
 
-/* -------------------- Selectors (UI adapters) -------------------- */
+/* -------------------- selectors -------------------- */
 
-// 1) raw suggestions (prefer topSuggestions if present)
 export const selectSearchResponse = (s: RootState) => s.searchResults.response;
 
 export const selectSuggestions = createSelector(
   selectSearchResponse,
-  (res): PlaceSuggestion[] =>
-    res?.topSuggestions?.length ? res.topSuggestions : res?.suggestions ?? []
+  (res) => res?.places ?? []
 );
 
-// 2) map raw suggestions -> your card's Pro type (at render time only)
-export const selectPros = createSelector(selectSuggestions, (sugs): Pro[] =>
-  sugs.map((s) => {
-    const openingHours = s.details?.currentOpeningHours;
-    return {
-      id: s.place_id,
-      name: s.name,
-      rating: s.rating ?? 0,
-      isOpen: openingHours?.openNow ?? null,
-      tel: s.details?.internationalPhoneNumber || undefined,
-      bookHref: s.details?.websiteUri || undefined,
-      imageUrl: s.photoUrl || undefined,
-      distanceKm:
-        typeof s.distanceMeters === "number" ? s.distanceMeters : undefined,
-      totalRating: s.user_ratings_total,
-    };
-  })
+export const selectPros = createSelector(selectSuggestions, (places): Pro[] =>
+  places.map((p: Place) => ({
+    id: p.id,
+    name: p.name,
+    rating: p.rating ?? 0,
+    tel: p.phone || undefined,
+    bookHref: p.website || undefined,
+    imageUrl: p.photo || undefined,
+    totalRating: p.reviews,
+    address: p.address,
+    mapsHref: p.maps,
+    isOpen: p.availability === true || p.availability === "Open",
+    distance: p.distance,
+  }))
 );
+
+function formatCategory(category: string): string {
+  return category
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
 export const selectCategory = createSelector(
   selectSearchResponse,
-  (res) => res?.problem.detectedIssue ?? "General"
+  (res): string => {
+    const rawCategory = res?.serviceType?.category ?? "General";
+    return formatCategory(rawCategory);
+  }
 );
 
 export const selectLocationLabel = createSelector(

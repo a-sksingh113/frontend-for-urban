@@ -6,12 +6,14 @@ type Props = {
   onClick: () => void;
   loading?: boolean;
   disabled?: boolean;
+  blocked?: boolean;
 };
 
 export default function AutoDetectButton({
   onClick,
   loading = false,
   disabled = false,
+  blocked = false,
 }: Props) {
   const isDisabled = disabled || loading;
 
@@ -21,7 +23,7 @@ export default function AutoDetectButton({
       variant="secondary"
       className="w-full h-11 inline-flex items-center justify-center gap-2 bg-gray-100 text-black disabled:cursor-not-allowed"
       onClick={onClick}
-      disabled={isDisabled}
+      disabled={isDisabled || blocked}
       aria-busy={loading}
       aria-live="polite"
     >

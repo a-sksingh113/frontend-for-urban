@@ -76,13 +76,16 @@ export default function PlacesDropdown({
               aria-selected={isSelected}
               className={cn(
                 "flex w-full items-center sm:items-start gap-2 px-4 py-2 cursor-pointer",
-                isSelected && "bg-blue-600",
+                isSelected && "bg-blue-600 cursor-default",
                 isFocused && "ring ring-slate-300",
                 !isSelected && "hover:bg-gray-100"
               )}
               // onMouseEnter={() => onHover(idx)}
               onMouseDown={(e) => e.preventDefault()}
-              onClick={() => onSelect(item)}
+              onClick={() => {
+                if (isSelected) return;
+                onSelect(item);
+              }}
             >
               <MapPin
                 className={cn(
